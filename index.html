@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .task {
+width:200px;
+border:1px solid grey;
+border-radius:5px;
+padding:15px;
+    }
+    td{
+        width:220px;       
+border:1px solid grey;
+    }
+    th {
+        height:30px;
+        border:1px solid grey;
+    }
+    table {
+        height:500px;
+    }
+    form {
+        position:absolute;
+        margin-left:auto;
+        margin-right:auto;
+        left:50%;
+        border:1px solid grey;
+        border-radius:5px;
+        padding:20px;
+        box-shadow:0px 0px 20px grey;
+    }
+    input {
+        box-sizing:border-box;
+        width:150px;
+        margin-left:10px;        
+    }    
+</style>
+    </head>
+<body>
+    <button onclick="taskData()">
+        Feladat létrehozása
+    </button>   
+    <form id="newTaskForm" style="display:none;">
+        <input type="text" id="tName" name="taskName">
+        <input type="button" onclick="newTask()" value="Létrehoz">
+    </form>
+    <table><tr><th>Status1</th><th>Status2</th></tr><tr>
+        <td ondrop="drop(event)" ondragover="dropOver(event)" id="td1"></td>
+        <td ondrop="drop(event)" ondragover="dropOver(event)" id="td2"></td>
+    </tr>
+</table>
+
+
+    <script>
+        var taskCount=1;
+        function Task(name){
+            this.name=name;
+            this.date="date";
+            this.endDate="endDate";
+            this.contact="contact";
+            this.status="status";
+            this.description="description";
+            this.responsible="responsible";
+        }
+        function taskData(){
+        var nTaskForm=document.getElementById("newTaskForm");
+        nTaskForm.style.display="block";
+        }
+        function newTask(){
+            var taskNameValue=document.getElementById("tName").value;
+            taskCount++;
+            var nTask=new Task(taskNameValue);
+            var taskDiv=document.createElement("div");
+            taskDiv.className="task";
+            var taskAtt=document.createAttribute("draggable");
+            taskAtt.value="true";
+            taskDiv.setAttributeNode(taskAtt);
+            var taskAtt2=document.createAttribute("ondragstart");
+            taskAtt2.value="drag(event)";
+            taskDiv.setAttributeNode(taskAtt2);
+            var taskAtt3=document.createAttribute("id");
+            taskAtt3.value="id"+taskCount;
+            taskDiv.setAttributeNode(taskAtt3);
+            var taskText=document.createTextNode(nTask.name);
+            taskDiv.appendChild(taskText);
+            var td=document.getElementById("td1");
+            td.appendChild(taskDiv);            
+            var nTaskForm2=document.getElementById("newTaskForm");
+        nTaskForm2.style.display="none";
+        }
+        
+        function drop(e){
+          e.preventDefault();
+          var data=e.dataTransfer.getData("text");
+            e.target.appendChild(document.getElementById(data));
+        }
+       function dropOver(e){
+          e.preventDefault();
+        }
+        function drag(e){
+            e.dataTransfer.setData("text",e.target.id);
+        }
+    </script>
+    
+</script>
+    </body>
+    </html>
